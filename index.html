@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Zhou Bojian 周柏健 — ML for Business</title>
+<meta name="description" content="MSc AI & Business Analytics candidate at Lingnan University. Seeking ML / Data Science roles in the HK–Shenzhen innovation corridor." />
+<style>
+  :root {
+    --bg: #fafbff;
+    --surface: #ffffff;
+    --ink: #0f172a;
+    --ink-soft: #475569;
+    --ink-mute: #64748b;
+    --line: #e2e8f0;
+    --accent: #6366f1;
+    --accent-2: #8b5cf6;
+    --accent-3: #06b6d4;
+    --grad: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+    --grad-soft: linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(139,92,246,0.08) 50%, rgba(6,182,212,0.08) 100%);
+    --shadow-sm: 0 1px 2px rgba(15,23,42,0.04), 0 1px 3px rgba(15,23,42,0.06);
+    --shadow-md: 0 4px 6px rgba(15,23,42,0.04), 0 10px 20px rgba(15,23,42,0.06);
+    --shadow-lg: 0 10px 40px rgba(99,102,241,0.12);
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(60% 40% at 10% 0%, rgba(99,102,241,0.10), transparent 60%),
+      radial-gradient(50% 40% at 100% 10%, rgba(6,182,212,0.10), transparent 60%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: saturate(180%) blur(14px);
+    background: rgba(255,255,255,0.72);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto; padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  }
+  .brand {
+    font-weight: 700; font-size: 15px; letter-spacing: -0.01em;
+    background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .nav-links { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .nav-links a {
+    text-decoration: none; color: var(--ink-soft); font-size: 14px; font-weight: 500;
+    padding: 8px 12px; border-radius: 8px; transition: all .2s;
+  }
+  .nav-links a:hover { color: var(--ink); background: var(--grad-soft); }
+  .lang-toggle {
+    margin-left: 8px; padding: 6px 12px; border: 1px solid var(--line);
+    border-radius: 999px; background: white; font-size: 13px; font-weight: 600;
+    cursor: pointer; color: var(--ink-soft); transition: all .2s;
+  }
+  .lang-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* LAYOUT */
+  section { max-width: 1100px; margin: 0 auto; padding: 72px 24px; }
+  section h2 {
+    font-size: 28px; font-weight: 700; letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .section-sub { color: var(--ink-mute); font-size: 15px; margin-bottom: 36px; }
+
+  /* HERO */
+  .hero { padding-top: 88px; padding-bottom: 48px; }
+  .hero-eyebrow {
+    display: inline-block; font-size: 13px; font-weight: 600;
+    padding: 6px 14px; border-radius: 999px;
+    background: var(--grad-soft); color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(36px, 5vw, 56px); font-weight: 800;
+    letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 20px;
+  }
+  .hero h1 .grad {
+    background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero-tag {
+    font-size: 18px; color: var(--ink-soft); max-width: 720px; margin-bottom: 28px;
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+  .tag {
+    font-size: 13px; font-weight: 500; padding: 6px 12px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
+    color: var(--ink-soft);
+  }
+  .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px; border-radius: 10px; font-weight: 600; font-size: 14px;
+    text-decoration: none; transition: all .2s; cursor: pointer; border: none;
+  }
+  .btn-primary { background: var(--grad); color: white; box-shadow: var(--shadow-lg); }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 14px 50px rgba(99,102,241,0.25); }
+  .btn-ghost { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start;
+  }
+  .about p { color: var(--ink-soft); margin-bottom: 14px; }
+  .about-card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 24px; box-shadow: var(--shadow-sm);
+  }
+  .about-card h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-mute); margin-bottom: 14px; font-weight: 600; }
+  .about-card ul { list-style: none; }
+  .about-card li {
+    padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--ink-soft);
+    display: flex; justify-content: space-between; gap: 12px;
+  }
+  .about-card li:last-child { border-bottom: none; }
+  .about-card li b { color: var(--ink); font-weight: 600; }
+  .strengths { list-style: none; margin-top: 14px; }
+  .strengths li {
+    padding: 10px 0 10px 28px; position: relative; color: var(--ink-soft); font-size: 15px;
+  }
+  .strengths li::before {
+    content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 700;
+  }
+
+  /* SKILLS */
+  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .skill-card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 24px; transition: all .25s; box-shadow: var(--shadow-sm);
+  }
+  .skill-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: rgba(99,102,241,0.3); }
+  .skill-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--grad); display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 16px; margin-bottom: 14px;
+  }
+  .skill-card h3 { font-size: 16px; margin-bottom: 12px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    font-size: 12px; padding: 4px 10px; background: var(--grad-soft);
+    color: var(--accent); border-radius: 6px; font-weight: 500;
+  }
+
+  /* PROJECTS */
+  .projects { display: grid; gap: 24px; }
+  .project {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 28px; box-shadow: var(--shadow-sm); transition: all .25s;
+  }
+  .project:hover { box-shadow: var(--shadow-md); border-color: rgba(99,102,241,0.3); }
+  .project-head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 16px; margin-bottom: 8px; flex-wrap: wrap;
+  }
+  .project h3 { font-size: 20px; letter-spacing: -0.01em; }
+  .project-date { font-size: 13px; color: var(--ink-mute); font-weight: 500; white-space: nowrap; }
+  .project-stack { margin: 14px 0 18px; }
+  .project-body { display: grid; gap: 12px; margin-bottom: 16px; }
+  .project-row {
+    display: grid; grid-template-columns: 110px 1fr; gap: 14px; font-size: 14px;
+  }
+  .project-row b {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-mute); font-weight: 600; padding-top: 3px;
+  }
+  .project-row span { color: var(--ink-soft); }
+  .project-row .highlight {
+    color: var(--ink); font-weight: 600;
+    background: linear-gradient(120deg, rgba(99,102,241,0.15) 0%, rgba(6,182,212,0.15) 100%);
+    padding: 1px 6px; border-radius: 4px;
+  }
+  .project-links { display: flex; gap: 10px; flex-wrap: wrap; }
+  .project-link {
+    font-size: 13px; color: var(--accent); text-decoration: none; font-weight: 600;
+    padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; transition: all .2s;
+  }
+  .project-link:hover { border-color: var(--accent); background: var(--grad-soft); }
+  .additional {
+    margin-top: 10px; padding: 20px 24px;
+    background: var(--grad-soft); border-radius: var(--radius); font-size: 14px; color: var(--ink-soft);
+  }
+  .additional b { color: var(--ink); }
+
+  /* RESUME */
+  .resume-card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 32px; box-shadow: var(--shadow-sm);
+  }
+  .resume-block { margin-bottom: 26px; }
+  .resume-block:last-child { margin-bottom: 0; }
+  .resume-block h3 {
+    font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-mute); font-weight: 600; margin-bottom: 14px;
+    padding-bottom: 8px; border-bottom: 1px solid var(--line);
+  }
+  .resume-item { margin-bottom: 14px; }
+  .resume-item:last-child { margin-bottom: 0; }
+  .resume-item-head {
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+  .resume-item-head b { font-size: 15px; }
+  .resume-item-head span { color: var(--ink-mute); font-size: 13px; }
+  .resume-item p { font-size: 14px; color: var(--ink-soft); }
+  .resume-cta { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* CONTACT */
+  .contact-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;
+  }
+  .contact-item {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px; text-decoration: none; color: inherit; transition: all .2s;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .contact-item:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: var(--shadow-md); }
+  .contact-icon {
+    width: 40px; height: 40px; border-radius: 10px; background: var(--grad-soft);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent); font-weight: 700; flex-shrink: 0;
+  }
+  .contact-item b { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-mute); margin-bottom: 2px; font-weight: 600; }
+  .contact-item span { font-size: 14px; color: var(--ink); word-break: break-all; }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 40px 24px; color: var(--ink-mute); font-size: 13px;
+    border-top: 1px solid var(--line); margin-top: 40px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 820px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .project-row { grid-template-columns: 1fr; gap: 4px; }
+    .project-row b { padding-top: 0; }
+    .nav-inner { padding: 12px 16px; gap: 8px; }
+    .nav-links a { padding: 6px 8px; font-size: 13px; }
+    section { padding: 56px 20px; }
+    .hero { padding-top: 64px; }
+  }
+
+  /* language toggle classes */
+  .zh { display: none; }
+  body.lang-zh .en { display: none; }
+  body.lang-zh .zh { display: initial; }
+  body.lang-zh .zh.block { display: block; }
+  body.lang-zh .zh.flex { display: flex; }
+  body.lang-zh .zh.grid { display: grid; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand">Zhou Bojian · 周柏健</div>
+    <div class="nav-links">
+      <a href="#home"><span class="en">Home</span><span class="zh">首页</span></a>
+      <a href="#about"><span class="en">About</span><span class="zh">关于</span></a>
+      <a href="#skills"><span class="en">Skills</span><span class="zh">技能</span></a>
+      <a href="#projects"><span class="en">Projects</span><span class="zh">项目</span></a>
+      <a href="#resume"><span class="en">Resume</span><span class="zh">简历</span></a>
+      <a href="#contact"><span class="en">Contact</span><span class="zh">联系</span></a>
+      <button class="lang-toggle" onclick="toggleLang()">
+        <span class="en">中文</span><span class="zh">EN</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="home" class="hero">
+  <span class="hero-eyebrow">
+    <span class="en">Available Aug 2026 · HK–Shenzhen</span>
+    <span class="zh">2026年8月到岗 · 港深双城</span>
+  </span>
+  <h1>
+    <span class="en">Turning data into <span class="grad">business decisions</span> with modern ML.</span>
+    <span class="zh">用现代机器学习，把数据转化为<span class="grad">商业决策</span>。</span>
+  </h1>
+  <p class="hero-tag">
+    <span class="en">MSc AI & Business Analytics candidate at Lingnan University (HK), with an audit & finance background and hands-on experience shipping end-to-end ML systems — from FinBERT fine-tuning to reinforcement learning for routing.</span>
+    <span class="zh">岭南大学人工智能与商业分析硕士在读，具备审计与金融背景，擅长端到端机器学习系统落地 —— 从 FinBERT 微调到基于强化学习的路径优化。</span>
+  </p>
+  <div class="tags">
+    <span class="tag">Python</span>
+    <span class="tag">PyTorch</span>
+    <span class="tag">NLP / LLMs</span>
+    <span class="tag">Reinforcement Learning</span>
+    <span class="tag">PySpark</span>
+    <span class="tag">Financial Analytics</span>
+    <span class="tag">Trilingual 🇭🇰 🇨🇳 🇬🇧</span>
+  </div>
+  <div class="hero-cta">
+    <a href="#projects" class="btn btn-primary">
+      <span class="en">View Projects →</span>
+      <span class="zh">查看项目 →</span>
+    </a>
+    <a href="#contact" class="btn btn-ghost">
+      <span class="en">Get in Touch</span>
+      <span class="zh">联系我</span>
+    </a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <h2><span class="en">About Me</span><span class="zh">关于我</span></h2>
+  <p class="section-sub">
+    <span class="en">Auditor-turned-ML-engineer, trilingual, built for the HK–Shenzhen corridor.</span>
+    <span class="zh">从审计师到机器学习工程师，三语沟通，专注港深创新走廊。</span>
+  </p>
+
+  <div class="about-grid">
+    <div class="about">
+      <p class="en">I'm an MSc AI & Business Analytics candidate at <b>Lingnan University Hong Kong</b>, graduating August 2026. Before moving into AI, I spent several years in auditing and finance at Shenzhen-based firms — that background shapes how I approach ML: I care as much about the business question and the failure mode as the model architecture.</p>
+      <p class="en">My coursework has been systems-heavy and end-to-end: I've fine-tuned FinBERT across 32 hyperparameter configurations for financial sentiment, built a Neural Architecture Search + Deep Q-Network pipeline for vehicle routing with time windows, and shipped a PySpark text-classification system benchmarking 30 classifier-embedding pairs. I hold <b>NVIDIA certifications</b> in AI Infrastructure and Generative AI LLMs, and run compute on Google Colab Pro+ with A100 GPU access.</p>
+      <p class="en">I commute daily between Shenzhen and Hong Kong, speak Cantonese, Mandarin, and English (IELTS 7.5), and my long-term goal is to build ML products that serve the HK–Shenzhen tech corridor.</p>
+
+      <p class="zh">我是<b>岭南大学</b>人工智能与商业分析硕士生，预计 2026 年 8 月毕业。在转入 AI 领域之前，我在深圳多家企业从事审计与财务工作数年 —— 这段背景决定了我对机器学习的思考方式：我既关心模型架构，也关心业务问题本身和模型的失败模式。</p>
+      <p class="zh">我的研究生课程强调端到端的系统能力：在金融情感分析中，针对 FinBERT 进行了 32 组超参数网格搜索；为带时间窗的车辆路径问题（VRPTW）构建了神经架构搜索 + 深度 Q 网络的训练框架；并基于 PySpark 完成了 30 组（5 分类器 × 6 嵌入）文本分类系统的评测。持有 <b>NVIDIA AI 基础设施与生成式 AI 大模型</b>两项认证，使用 Google Colab Pro+ 的 A100 GPU 进行训练。</p>
+      <p class="zh">我每天往返深港两地，熟练使用粤语、普通话、英语（雅思 7.5），长期目标是为港深科技走廊打造实用的机器学习产品。</p>
+
+      <h3 style="margin-top:24px;font-size:14px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-mute);">
+        <span class="en">Focus Areas</span><span class="zh">专注方向</span>
+      </h3>
+      <ul class="strengths">
+        <li class="en"><b>Applied NLP & LLMs</b> — fine-tuning, benchmarking, and domain adaptation (finance, roleplay, Cantonese ASR)</li>
+        <li class="en"><b>Reinforcement learning for optimization</b> — DQN, action masking, VRPTW, game environments</li>
+        <li class="en"><b>Big-data ML pipelines</b> — PySpark, distributed training, systematic experimentation</li>
+        <li class="en"><b>Business framing</b> — translating ambiguous business questions into measurable ML objectives</li>
+
+        <li class="zh"><b>应用型 NLP 与大模型</b> — 微调、基准评测、领域适应（金融、角色扮演、粤语 ASR）</li>
+        <li class="zh"><b>面向优化问题的强化学习</b> — DQN、动作掩码、VRPTW、游戏环境</li>
+        <li class="zh"><b>大数据机器学习流水线</b> — PySpark、分布式训练、系统化实验设计</li>
+        <li class="zh"><b>业务建模能力</b> — 将模糊的业务问题翻译为可度量的机器学习目标</li>
+      </ul>
+    </div>
+
+    <div class="about-card">
+      <h3><span class="en">Education</span><span class="zh">教育背景</span></h3>
+      <ul>
+        <li>
+          <span>
+            <b><span class="en">MSc AI & Business Analytics</span><span class="zh">人工智能与商业分析硕士</span></b><br>
+            <span class="en">Lingnan University, Hong Kong</span>
+            <span class="zh">香港岭南大学</span>
+          </span>
+          <span style="color:var(--ink-mute);font-size:13px;white-space:nowrap;">
+            <span class="en">Expected Aug 2026</span><span class="zh">预计 2026.08</span>
+          </span>
+        </li>
+        <li>
+          <span>
+            <b><span class="en">Prior: Auditing & Finance</span><span class="zh">此前：审计与金融</span></b><br>
+            <span class="en">Shenzhen-based firms</span>
+            <span class="zh">深圳多家企业</span>
+          </span>
+        </li>
+      </ul>
+      <h3 style="margin-top:22px;"><span class="en">Certifications</span><span class="zh">认证</span></h3>
+      <ul>
+        <li><span>NVIDIA — AI Infrastructure</span></li>
+        <li><span>NVIDIA — Generative AI & LLMs</span></li>
+        <li><span>IELTS 7.5</span></li>
+      </ul>
+      <h3 style="margin-top:22px;"><span class="en">Languages</span><span class="zh">语言</span></h3>
+      <ul>
+        <li><span><span class="en">Cantonese</span><span class="zh">粤语</span></span><b><span class="en">Native</span><span class="zh">母语</span></b></li>
+        <li><span><span class="en">Mandarin</span><span class="zh">普通话</span></span><b><span class="en">Native</span><span class="zh">母语</span></b></li>
+        <li><span>English</span><b>IELTS 7.5</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <h2><span class="en">Skills</span><span class="zh">技能</span></h2>
+  <p class="section-sub">
+    <span class="en">Technical depth · business framing · production tooling.</span>
+    <span class="zh">技术深度 · 业务建模 · 工程工具链。</span>
+  </p>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-icon">&lt;/&gt;</div>
+      <h3><span class="en">Technical</span><span class="zh">技术能力</span></h3>
+      <div class="chips">
+        <span class="chip">Python</span>
+        <span class="chip">SQL</span>
+        <span class="chip">PyTorch</span>
+        <span class="chip">Transformers</span>
+        <span class="chip">PySpark</span>
+        <span class="chip">XGBoost</span>
+        <span class="chip">NLP</span>
+        <span class="chip">Deep RL</span>
+        <span class="chip">LLM fine-tuning</span>
+        <span class="chip">Statistics</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">📊</div>
+      <h3><span class="en">Business</span><span class="zh">商业能力</span></h3>
+      <div class="chips">
+        <span class="chip"><span class="en">Problem framing</span><span class="zh">问题定义</span></span>
+        <span class="chip"><span class="en">Metrics design</span><span class="zh">指标设计</span></span>
+        <span class="chip"><span class="en">A/B testing</span><span class="zh">A/B 实验</span></span>
+        <span class="chip"><span class="en">Storytelling</span><span class="zh">数据叙事</span></span>
+        <span class="chip"><span class="en">Financial analysis</span><span class="zh">财务分析</span></span>
+        <span class="chip"><span class="en">Auditing</span><span class="zh">审计</span></span>
+        <span class="chip"><span class="en">Reporting</span><span class="zh">汇报</span></span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🛠</div>
+      <h3><span class="en">Tools & Stack</span><span class="zh">工具与栈</span></h3>
+      <div class="chips">
+        <span class="chip">pandas</span>
+        <span class="chip">scikit-learn</span>
+        <span class="chip">Hugging Face</span>
+        <span class="chip">PostgreSQL</span>
+        <span class="chip">MongoDB</span>
+        <span class="chip">Git / GitHub</span>
+        <span class="chip">Colab Pro+ (A100)</span>
+        <span class="chip">Selenium / Playwright</span>
+        <span class="chip">KNIME</span>
+        <span class="chip">Tableau</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <h2><span class="en">Projects</span><span class="zh">项目</span></h2>
+  <p class="section-sub">
+    <span class="en">Four featured projects across NLP/finance, time-series forecasting, reinforcement learning, and combinatorial optimization.</span>
+    <span class="zh">四个精选项目，覆盖 NLP/金融、时序预测、强化学习与组合优化。</span>
+  </p>
+
+  <div class="projects">
+
+    <!-- Project 1: FinBERT -->
+    <article class="project">
+      <div class="project-head">
+        <h3><span class="en">FinBERT Fine-Tuning for Financial Sentiment</span><span class="zh">FinBERT 金融情感分析微调</span></h3>
+        <span class="project-date">CDS525 · Mar–Apr 2026</span>
+      </div>
+      <div class="project-stack tags">
+        <span class="tag">PyTorch</span><span class="tag">Transformers</span><span class="tag">FinBERT</span><span class="tag">Grid Search</span>
+      </div>
+      <div class="project-body">
+        <div class="project-row"><b><span class="en">Problem</span><span class="zh">问题</span></b><span class="en">Financial texts (earnings reports, analyst notes) use domain-specific language that generic sentiment models misclassify — a real cost for any analyst or investor relying on automated signals.</span><span class="zh">金融文本（财报、研报）高度依赖领域词汇，通用情感模型误判率高 —— 对依赖自动化信号的分析师或投资者而言代价不菲。</span></div>
+        <div class="project-row"><b><span class="en">Data</span><span class="zh">数据</span></b><span class="en">Financial PhraseBank (~4.8k sentences, 3-class sentiment). Handled moderate class imbalance with weighted cross-entropy and focal loss.</span><span class="zh">Financial PhraseBank 数据集（约 4800 句，3 类情感）。使用加权交叉熵与 Focal Loss 处理类别不平衡。</span></div>
+        <div class="project-row"><b><span class="en">Approach</span><span class="zh">方法</span></b><span class="en">Full factorial grid search: 2 loss functions × 4 batch sizes × 4 learning rates = <b>32 training runs</b>, all tracked in a unified notebook with reproducible seeds.</span><span class="zh">完整析因网格搜索：2 种损失函数 × 4 组 batch size × 4 组学习率 = <b>32 次训练</b>，统一 notebook 可复现。</span></div>
+        <div class="project-row"><b><span class="en">Outcome</span><span class="zh">成果</span></b><span class="en"><span class="highlight">Best macro F1: 89.92%</span> (Weighted CE, BS=32, LR=2e-5). Delivered unified training notebook, ~2,664-word Word report, and GitHub README.</span><span class="zh"><span class="highlight">最佳 Macro F1：89.92%</span>（加权交叉熵, BS=32, LR=2e-5）。交付统一训练 notebook、约 2664 字 Word 报告与 GitHub README。</span></div>
+        <div class="project-row"><b><span class="en">My Role</span><span class="zh">我的贡献</span></b><span class="en">Group project — I designed the experiment grid, implemented the unified training loop, ran all 32 configurations, and authored the analysis.</span><span class="zh">小组项目 —— 我负责实验设计、统一训练循环实现、执行全部 32 组实验并撰写分析报告。</span></div>
+      </div>
+      <div class="project-links">
+        <a class="project-link" href="https://github.com/zhoubojian-stevenchow/CDS525_Group_Project" target="_blank" rel="noopener">GitHub →</a>
+      </div>
+    </article>
+
+    <!-- Project 2: VRPTW -->
+    <article class="project">
+      <div class="project-head">
+        <h3><span class="en">NAS-EA + DQN for Vehicle Routing with Time Windows</span><span class="zh">基于 NAS-EA + DQN 的带时间窗车辆路径优化</span></h3>
+        <span class="project-date">CDS526 · Feb–Apr 2026</span>
+      </div>
+      <div class="project-stack tags">
+        <span class="tag">Deep RL</span><span class="tag">PyTorch</span><span class="tag">Neural Architecture Search</span><span class="tag">Evolutionary Algorithms</span>
+      </div>
+      <div class="project-body">
+        <div class="project-row"><b><span class="en">Problem</span><span class="zh">问题</span></b><span class="en">Last-mile delivery with time-window constraints is NP-hard. Classical solvers are exact but slow; naive RL agents pick infeasible actions and train unstably.</span><span class="zh">带时间窗的最后一公里配送是 NP 难问题。传统求解器精确但慢；朴素强化学习智能体频繁选择不可行动作，训练不稳定。</span></div>
+        <div class="project-row"><b><span class="en">Data</span><span class="zh">数据</span></b><span class="en">Solomon VRPTW benchmark instances. Customer locations, demands, time windows, and service durations.</span><span class="zh">Solomon VRPTW 基准数据集：客户坐标、需求、时间窗与服务时长。</span></div>
+        <div class="project-row"><b><span class="en">Approach</span><span class="zh">方法</span></b><span class="en">Combined <b>Neural Architecture Search</b> via evolutionary algorithm with a <b>Dueling DQN</b> agent. Implemented action masking so infeasible actions get Q=−∞, and diagnosed depot-reset and time-window feasibility bugs across v6→v7→v8.</span><span class="zh">结合<b>进化算法驱动的神经架构搜索</b>与 <b>Dueling DQN</b>。引入动作掩码使不可行动作 Q=−∞，并在 v6→v7→v8 过程中修复了 depot 重置与时间窗可行性缺陷。</span></div>
+        <div class="project-row"><b><span class="en">Outcome</span><span class="zh">成果</span></b><span class="en">v7 achieved <span class="highlight">mean distance 731 with 18% CV</span>, vs v6's 948 / 77% CV — a 23% improvement in solution quality and 4× improvement in stability across 5 seeds.</span><span class="zh">v7 取得<span class="highlight">平均路径长度 731、变异系数 18%</span>，相较 v6（948 / 77%）解的质量提升 23%，稳定性提升 4 倍（5 个随机种子）。</span></div>
+        <div class="project-row"><b><span class="en">My Role</span><span class="zh">我的贡献</span></b><span class="en">Individual research project. Designed NAS search space, implemented masking, ran multi-seed experiments, and wrote the report.</span><span class="zh">个人研究项目。负责架构搜索空间设计、掩码机制实现、多种子实验与报告撰写。</span></div>
+      </div>
+      <div class="project-links">
+        <a class="project-link" href="https://github.com/zhoubojian-stevenchow/CDS526_NAS_RL_VRPTW_v7" target="_blank" rel="noopener">GitHub →</a>
+      </div>
+    </article>
+
+    <!-- Project 3: CDS524 Weather Forecasting -->
+    <article class="project">
+      <div class="project-head">
+        <h3><span class="en">European Weather Forecasting: XGBoost vs BiLSTM</span><span class="zh">欧洲天气预测：XGBoost 对比 BiLSTM</span></h3>
+        <span class="project-date">CDS524 · 2025–2026</span>
+      </div>
+      <div class="project-stack tags">
+        <span class="tag">XGBoost</span><span class="tag">BiLSTM + Attention</span><span class="tag">Time Series</span><span class="tag">Feature Engineering</span>
+      </div>
+      <div class="project-body">
+        <div class="project-row"><b><span class="en">Problem</span><span class="zh">问题</span></b><span class="en">Temperature forecasting benchmarks usually pit tree models against deep learning with standard lag features. But can <i>domain-informed features</i> — in this case Chinese cosmological calendar features (24 Solar Terms, Wuxing, Heavenly Stems) — actually shift the balance? And do the two model families respond to them the same way?</span><span class="zh">温度预测的常见评测是用标准滞后特征对比树模型和深度学习。但<i>领域启发式特征</i> —— 这里指中国历法体系（二十四节气、五行、天干） —— 是否真能改变两者的表现平衡？两类模型对这类特征的响应是否一致？</span></div>
+        <div class="project-row"><b><span class="en">Data</span><span class="zh">数据</span></b><span class="en">European daily weather records with temperature, humidity, pressure, and wind features. Aligned to the Chinese solar calendar for feature engineering.</span><span class="zh">欧洲日度气象数据：温度、湿度、气压、风速等。与中国农历节气体系对齐后构造特征。</span></div>
+        <div class="project-row"><b><span class="en">Approach</span><span class="zh">方法</span></b><span class="en">Clean <b>2×2 factorial design</b>: {XGBoost, BiLSTM+Attention} × {standard lag/rolling features, Chinese cosmological features}. Statistical significance tested with paired t-tests across multiple seeds.</span><span class="zh">清晰的 <b>2×2 析因设计</b>：{XGBoost, BiLSTM+Attention} × {标准滞后/滚动特征, 中国历法特征}。多随机种子配对 t 检验评估显著性。</span></div>
+        <div class="project-row"><b><span class="en">Outcome</span><span class="zh">成果</span></b><span class="en">Non-obvious finding: Chinese calendar features <span class="highlight">significantly helped XGBoost without lag features (p=0.0005)</span> but <i>harmed</i> LSTM performance — suggesting the two architectures treat cyclical priors very differently. Delivered full report, GitHub README, and a 20-minute narrated PPT.</span><span class="zh">非直观结论：中国历法特征<span class="highlight">对不使用滞后特征的 XGBoost 显著提升（p=0.0005）</span>，但<i>损害</i> LSTM 表现 —— 表明两类架构对周期性先验的利用方式截然不同。交付完整报告、GitHub README 与 20 分钟讲稿的 PPT。</span></div>
+        <div class="project-row"><b><span class="en">My Role</span><span class="zh">我的贡献</span></b><span class="en">Group project. I designed the factorial experiment, engineered the Chinese-calendar feature set, built both pipelines, and ran the statistical analysis.</span><span class="zh">小组项目。我负责析因实验设计、中国历法特征工程、两类流水线实现以及统计显著性分析。</span></div>
+      </div>
+      <div class="project-links">
+        <a class="project-link" href="https://github.com/zhoubojian-stevenchow/CDS524-Group-Project" target="_blank" rel="noopener">GitHub →</a>
+      </div>
+    </article>
+
+    <!-- Project 4: CDS524 Space Defender DQN -->
+    <article class="project">
+      <div class="project-head">
+        <h3><span class="en">Space Defender: Dueling DQN + Prioritized Experience Replay</span><span class="zh">Space Defender：Dueling DQN + 优先经验回放</span></h3>
+        <span class="project-date">CDS524 · 2025</span>
+      </div>
+      <div class="project-stack tags">
+        <span class="tag">Deep RL</span><span class="tag">Dueling DQN</span><span class="tag">PER</span><span class="tag">Curriculum Learning</span><span class="tag">Reward Shaping</span>
+      </div>
+      <div class="project-body">
+        <div class="project-row"><b><span class="en">Problem</span><span class="zh">问题</span></b><span class="en">A standard RL benchmark game — but a good testbed for a real-world issue: agents that exploit reward loopholes (e.g., "corner-hiding" to maximize survival time without engaging) rather than learning the intended behavior. How do you get stable, high-scoring, and <i>honest</i> play?</span><span class="zh">这是一个标准强化学习基准游戏，同时是现实问题的良好载体：智能体往往会钻奖励漏洞（例如"躲角落"来延长存活时间而不参与对抗），而非学习真正期望的行为。如何训练出稳定、高分且<i>行为符合预期</i>的策略？</span></div>
+        <div class="project-row"><b><span class="en">Data</span><span class="zh">数据</span></b><span class="en">Self-generated from a custom Space Defender game environment — state, action, reward, next-state tuples sampled during rollouts across 8 training iterations.</span><span class="zh">自定义 Space Defender 游戏环境自产生数据 —— 8 个训练迭代中采样的 (状态, 动作, 奖励, 下一状态) 经验元组。</span></div>
+        <div class="project-row"><b><span class="en">Approach</span><span class="zh">方法</span></b><span class="en"><b>Dueling DQN</b> with <b>Prioritized Experience Replay</b>, iterated v1→v8. Diagnosed reward-hacking (corner-hiding), redesigned the reward function, and introduced <b>curriculum learning</b> in v8 to progressively harden the enemy spawn pattern.</span><span class="zh"><b>Dueling DQN</b> 结合<b>优先经验回放（PER）</b>，迭代 v1→v8。诊断出奖励黑客行为（躲角落），重新设计奖励函数，并在 v8 中引入<b>课程学习</b>，逐步加大敌方生成难度。</span></div>
+        <div class="project-row"><b><span class="en">Outcome</span><span class="zh">成果</span></b><span class="en">Reached <span class="highlight">mean score ~1,960</span> (target 3,500). More importantly, the iteration log documents how each architectural and reward-shaping change moved the needle — a realistic record of RL debugging, not just a final number.</span><span class="zh">最终<span class="highlight">平均得分约 1960</span>（目标 3500）。更重要的是迭代日志完整记录了每次架构与奖励调整的效果 —— 真实呈现强化学习调试过程，而不只是给出一个终值。</span></div>
+        <div class="project-row"><b><span class="en">My Role</span><span class="zh">我的贡献</span></b><span class="en">Individual project. Full ownership: environment, agent architecture, PER implementation, reward design, and 8-version iteration.</span><span class="zh">个人项目。独立完成：环境搭建、智能体架构、PER 实现、奖励设计与 8 版本迭代。</span></div>
+      </div>
+      <div class="project-links">
+        <a class="project-link" href="https://github.com/zhoubojian-stevenchow/cds524_assignment_1_Space_Defender_by_Dueling_DQN_and_PER" target="_blank" rel="noopener">GitHub →</a>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="additional">
+    <span class="en"><b>Additional projects:</b> CDS527 PySpark Starbucks text classification benchmark (5 classifiers × 6 embeddings, Tuned BERT+LR reached 71.6% accuracy); Cantonese ASR benchmark (Whisper fine-tuning on Common Voice 17.0 for a CMHK R&D internship application); CDS529 LLM roleplay benchmarking (BFI-2 personality + Empath voice fidelity across 5 LLMs × 100 characters); CIFAR-10 CNN dissertation.</span>
+    <span class="zh"><b>其他项目：</b>CDS527 PySpark 星巴克文本分类基准（5 分类器 × 6 嵌入，调参后 BERT+LR 准确率 71.6%）；粤语 ASR 基准（基于 Common Voice 17.0 的 Whisper 微调，为应聘中国移动香港 R&D 实习准备）；CDS529 大模型角色扮演基准（BFI-2 人格 + Empath 语料保真度，5 个大模型 × 100 角色）；CIFAR-10 CNN 毕业论文。</span>
+  </div>
+</section>
+
+<!-- RESUME -->
+<section id="resume">
+  <h2><span class="en">Resume</span><span class="zh">简历</span></h2>
+  <p class="section-sub">
+    <span class="en">Quick snapshot — PDF version available below.</span>
+    <span class="zh">简要快照 —— 完整 PDF 版本请见下方下载。</span>
+  </p>
+
+  <div class="resume-card">
+    <div class="resume-block">
+      <h3><span class="en">Education</span><span class="zh">教育</span></h3>
+      <div class="resume-item">
+        <div class="resume-item-head">
+          <b><span class="en">Lingnan University, Hong Kong</span><span class="zh">香港岭南大学</span></b>
+          <span><span class="en">Expected Aug 2026</span><span class="zh">预计 2026.08</span></span>
+        </div>
+        <p><span class="en">MSc in Artificial Intelligence & Business Analytics</span><span class="zh">人工智能与商业分析硕士</span></p>
+      </div>
+    </div>
+
+    <div class="resume-block">
+      <h3><span class="en">Experience</span><span class="zh">工作经历</span></h3>
+      <div class="resume-item">
+        <div class="resume-item-head">
+          <b><span class="en">Auditor / Finance Associate</span><span class="zh">审计师 / 财务专员</span></b>
+          <span><span class="en">Shenzhen-based firms</span><span class="zh">深圳多家企业</span></span>
+        </div>
+        <p><span class="en">Audit engagements, financial analysis, and reporting. Built the business-framing mindset I now bring to ML work.</span><span class="zh">负责审计项目、财务分析与汇报工作。所培养的业务思维已融入当前的机器学习工作。</span></p>
+      </div>
+    </div>
+
+    <div class="resume-block">
+      <h3><span class="en">Selected Projects</span><span class="zh">精选项目</span></h3>
+      <div class="resume-item"><p><b>FinBERT Grid Search</b> — <span class="en">32-config fine-tuning, best macro F1 89.92%</span><span class="zh">32 组超参数微调，最佳 Macro F1 89.92%</span></p></div>
+      <div class="resume-item"><p><b>NAS-EA + DQN VRPTW</b> — <span class="en">23% solution-quality gain, 4× stability improvement</span><span class="zh">解的质量提升 23%，稳定性提升 4 倍</span></p></div>
+      <div class="resume-item"><p><b>Weather Forecasting 2×2 Factorial</b> — <span class="en">XGBoost vs BiLSTM with Chinese calendar features (p=0.0005)</span><span class="zh">XGBoost 对比 BiLSTM，中国历法特征显著性 p=0.0005</span></p></div>
+      <div class="resume-item"><p><b>Space Defender Dueling DQN + PER</b> — <span class="en">8-version iteration, reward-hacking diagnosis, curriculum learning</span><span class="zh">8 版本迭代，奖励黑客诊断，课程学习</span></p></div>
+    </div>
+
+    <div class="resume-block">
+      <h3><span class="en">Certifications & Languages</span><span class="zh">认证与语言</span></h3>
+      <div class="resume-item"><p>NVIDIA AI Infrastructure · NVIDIA Generative AI & LLMs · IELTS 7.5</p></div>
+      <div class="resume-item"><p><span class="en">Cantonese (native) · Mandarin (native) · English (professional)</span><span class="zh">粤语（母语）· 普通话（母语）· 英语（专业工作级）</span></p></div>
+    </div>
+
+    <div class="resume-cta">
+      <a href="resume.pdf" class="btn btn-primary" target="_blank" rel="noopener">
+        <span class="en">Download PDF Resume ↓</span>
+        <span class="zh">下载 PDF 简历 ↓</span>
+      </a>
+      <a href="https://www.linkedin.com/in/bojian-zhou-62391637b/" class="btn btn-ghost" target="_blank" rel="noopener">LinkedIn →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <h2><span class="en">Contact</span><span class="zh">联系方式</span></h2>
+  <p class="section-sub">
+    <span class="en">Open to ML/Data Science roles across Hong Kong and Shenzhen. I reply within 24 hours.</span>
+    <span class="zh">欢迎港深两地的机器学习 / 数据科学岗位机会，24 小时内回复。</span>
+  </p>
+  <div class="contact-grid">
+    <a class="contact-item" href="mailto:neofastio@gmail.com">
+      <div class="contact-icon">@</div>
+      <div>
+        <b><span class="en">Email</span><span class="zh">邮箱</span></b>
+        <span>neofastio@gmail.com</span>
+      </div>
+    </a>
+    <a class="contact-item" href="https://github.com/zhoubojian-stevenchow" target="_blank" rel="noopener">
+      <div class="contact-icon">GH</div>
+      <div>
+        <b>GitHub</b>
+        <span>zhoubojian-stevenchow</span>
+      </div>
+    </a>
+    <a class="contact-item" href="https://www.linkedin.com/in/bojian-zhou-62391637b/" target="_blank" rel="noopener">
+      <div class="contact-icon">in</div>
+      <div>
+        <b>LinkedIn</b>
+        <span>bojian-zhou</span>
+      </div>
+    </a>
+    <a class="contact-item" href="tel:+85291021799">
+      <div class="contact-icon">☎</div>
+      <div>
+        <b><span class="en">Phone (HK)</span><span class="zh">电话（香港）</span></b>
+        <span>+852 9102 1799</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <span class="en">© 2026 Zhou Bojian · Built with GitHub Pages · Last updated April 2026</span>
+  <span class="zh">© 2026 周柏健 · GitHub Pages 构建 · 最近更新于 2026 年 4 月</span>
+</footer>
+
+<script>
+  function toggleLang() {
+    document.body.classList.toggle('lang-zh');
+    const lang = document.body.classList.contains('lang-zh') ? 'zh' : 'en';
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+    try { localStorage.setItem('site_lang', lang); } catch(e) {}
+  }
+  try {
+    const saved = localStorage.getItem('site_lang');
+    if (saved === 'zh') document.body.classList.add('lang-zh');
+  } catch(e) {}
+</script>
+</body>
+</html>
